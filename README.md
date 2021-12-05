@@ -1,2 +1,1 @@
-# FullStackOpen
-All of the exercsies I've done from FullStackOpen
+This is where I store my FullStackOpen exercises
