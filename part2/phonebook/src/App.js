@@ -5,7 +5,7 @@ import Phonebook from './components/Phonebook'
 import axios from 'axios'
 
 const App = () => {
-   const [ persons, setPersons ] = useState([]) 
+  const [ persons, setPersons ] = useState([]) 
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber ] = useState('')
   const [filter, setFilter ] = useState('')
