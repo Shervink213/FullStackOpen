@@ -6,6 +6,7 @@ import CountryList from './components/countryList';
 const App = () => {
   const [countries, setCountries] = useState([]);
   const [find, setFind ] = useState("");
+  const api_key = process.env.REACT_APP_API_KEY;
 
   const search = (filter) => {
     console.log('effect');
@@ -39,11 +40,18 @@ const App = () => {
     
   }
 
+  const ShowCountry = (show) => {
+    const newShow = show;
+    setFind(newShow);
+    search(newShow);
+  }
+
   
   return(
     <div>
       <Find find = {find} handleFind = {handleFind} />
-      <CountryList countries = {countries} />
+      <CountryList countries = {countries} find = {find} 
+      ShowCountry = {ShowCountry} api_key = {api_key}/>
     </div>
   )
 }

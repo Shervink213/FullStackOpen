@@ -1,6 +1,11 @@
 import Country from "./Country";
 
-const CountryList = ({ countries }) =>{
+const CountryList = ({ countries, find, ShowCountry, api_key }) =>{
+    const Weather = () =>{
+        
+    }
+   
+
     if (countries.length > 10 ){
         return (
             <p>Too many matches, specify another filter</p>
@@ -9,15 +14,22 @@ const CountryList = ({ countries }) =>{
     else if (countries.length >1){
         return (
             <ul>
-                {countries.map(country => 
+                {countries.map(country => (
                     <div key = {country.name.official}>
                         {country.name.common}
+                        <button onClick ={ () =>ShowCountry(country.name.common)}    
+                        type="button">
+                            Show
+                        </button>
+    
                     </div>
+                    )
                 )}
+                
             </ul>
         )
     }
-    else if (countries.length == 1){
+    else if (countries.length === 1){
         const country = countries[0];
         const language = Object.values(country.languages);
         console.log(language);
