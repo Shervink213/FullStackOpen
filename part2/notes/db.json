@@ -10,7 +10,7 @@
       "id": 2,
       "content": "Browser can execute only JavaScript",
       "date": "2019-05-30T18:39:34.091Z",
-      "important": false
+      "important": true
     },
     {
       "id": 3,
@@ -21,7 +21,7 @@
     {
       "content": "Hello there",
       "date": "2021-12-22T03:41:41.388Z",
-      "important": false,
+      "important": true,
       "id": 4
     },
     {
@@ -33,7 +33,7 @@
     {
       "content": "General Kenobi",
       "date": "2021-12-22T04:08:22.109Z",
-      "important": false,
+      "important": true,
       "id": 6
     }
   ]
