@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Phonebook from './components/Phonebook'
-import axios from 'axios'
+import Notification from './components/Notification';
 import phonebookServices from './services/phonebook';
 
 const App = () => {
@@ -10,6 +10,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber ] = useState('')
   const [filter, setFilter ] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [successMessage, setSucessMessage] = useState(true);
 
   useEffect(() => {
     console.log('effect')
@@ -34,16 +36,21 @@ const App = () => {
         const changedGuy = {...newGuy, number: newNumber};
 
         phonebookServices
-          .update(changedGuy.id, changedGuy).then(returendGuy => {
+          .update(changedGuy.id, changedGuy).then(returnedGuy => {
+            console.log('map');
             setPersons(persons.map(person => 
               person.id !== changedGuy.id 
-                ? person : returendGuy
+                ? person : returnedGuy
             ));
           })
           .catch(error => {
-            alert(
-              `the number can't be changed`
-            );
+            setSucessMessage(false);
+            setErrorMessage(`information on ${newName} has already been removed from server`);
+            setPersons(persons.filter(n => n.name !== newName))
+            setTimeout(() => {
+              setErrorMessage(null)
+            }, 5000);
+            
           })
       }
     } 
@@ -57,11 +64,21 @@ const App = () => {
       phonebookServices
         .create(newPerson)
         .then(returnedPerson => {
-          setPersons(persons.concat(newPerson));
+          setPersons(persons.concat(returnedPerson));
           setNewName('');
-          setNewNumber('')
-          setFilter('')
+          setNewNumber('');
+          setFilter('');
+
+          setSucessMessage(true)
+          setErrorMessage(`Added ${returnedPerson.name}`);
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
         })
+        .catch(error => {
+          console.log(error.message)
+        })
+
       console.log('new contact created')
     }
   }
@@ -88,20 +105,35 @@ const App = () => {
     const changedPerson = {...persons };
     const answer = window.confirm(`delete ${person.name}?`);
 
+
     if(!answer){
       return;
     }
 
+
     phonebookServices
       .remove(id, changedPerson).then(returnedPerson => {
         setPersons(persons.map(person => person.id !== id ? person : returnedPerson));
-
+        console.log('true')
+        setSucessMessage(true);
+        setErrorMessage(
+          `Deleted ${person.name}`
+        );
+        setPersons(persons.filter(n => n.id !== id))
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000)
       })
       .catch(error => {
-        alert(
-          `the person ${person.name} was already deleted`
+
+        setSucessMessage(false);
+        setErrorMessage(
+          `that person was already deleted`
         )
         setPersons(persons.filter(n => n.id !== id))
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000)
       })
   }
 
@@ -110,6 +142,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message = {errorMessage} state = {successMessage} />
       <h2>Search</h2>
       <Filter filter = {filter} handleFilter = {handleFilter}/>
       <h2>Add contact</h2>
